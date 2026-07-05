@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degree Path — NCCU History Major</title>
+<style>
+:root{
+  --maroon:#862633; --maroon-bright:#A6303F; --maroon-deep:#5E1A24;
+  --grey:#6B6C70; --grey-light:#9A9B9E; --grey-pale:#E8E8EA;
+  --paper:#F7F6F4; --white:#FFFFFF; --ink:#1C1C1E; --line:#D8D6D2;
+  --ok:#3E7A4E; --ok-bg:#E4F0E6; --warn:#B5852A; --warn-bg:#FBF2DE;
+  --err:#B23A48; --err-bg:#FBE3E6; --excess:#8A6D1F; --excess-bg:#FCF4D6;
+  --shadow:0 1px 2px rgba(28,28,30,.08),0 4px 14px rgba(28,28,30,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.5}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--maroon-bright);outline-offset:2px}
+
+header{background:var(--maroon);color:var(--white);padding:0;position:sticky;top:0;z-index:30;box-shadow:var(--shadow)}
+.header-inner{max-width:1080px;margin:0 auto;padding:14px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.header-inner h1{font-family:Georgia,"Times New Roman",serif;font-size:1.3rem;font-weight:700;letter-spacing:.01em}
+.header-inner .sub{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;opacity:.85;border-left:1px solid rgba(255,255,255,.35);padding-left:16px}
+.header-actions{margin-left:auto;display:flex;gap:8px}
+.hbtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:var(--white);
+  padding:7px 14px;border-radius:5px;font-size:.8rem;font-weight:600}
+.hbtn:hover{background:rgba(255,255,255,.22)}
+.hbtn.solid{background:var(--white);color:var(--maroon);border-color:var(--white)}
+.hbtn.solid:hover{background:var(--paper)}
+
+.wrap{max-width:1080px;margin:0 auto;padding:24px 26px 90px}
+
+/* progress dashboard */
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:8px}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat .num{font-size:1.7rem;font-weight:700;font-family:Georgia,serif;line-height:1}
+.stat .lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--grey);margin-top:5px}
+.stat .bar{height:5px;background:var(--grey-pale);border-radius:3px;margin-top:9px;overflow:hidden}
+.stat .bar span{display:block;height:100%;background:var(--maroon);border-radius:3px;transition:width .3s}
+.stat.done .num{color:var(--ok)}
+.stat.done .bar span{background:var(--ok)}
+
+.tabbar{display:flex;gap:2px;margin:22px 0 0;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.tab{background:none;border:none;padding:11px 18px;font-size:.9rem;font-weight:600;color:var(--grey);
+  border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--maroon);border-bottom-color:var(--maroon)}
+
+.panel{display:none;padding-top:22px}
+.panel.active{display:block}
+
+/* student info */
+.info-card{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-bottom:18px;box-shadow:var(--shadow)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fld label{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);margin-bottom:4px;font-weight:600}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:.9rem;background:var(--white);color:var(--ink)}
+.fld input:focus{border-color:var(--maroon)}
+.fld textarea{resize:vertical;min-height:70px;font-family:inherit}
+
+/* requirement blocks */
+.reqblock{background:var(--white);border:1px solid var(--line);border-radius:8px;margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden}
+.reqblock > h3{background:var(--maroon-deep);color:var(--white);padding:11px 18px;font-size:.95rem;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.reqblock > h3 .credits{font-size:.8rem;font-weight:600;opacity:.9}
+.section{border-top:1px solid var(--line)}
+.section:first-child{border-top:none}
+.section-head{padding:10px 18px 6px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.section-head .sname{font-weight:700;font-size:.9rem}
+.section-head .snote{font-size:.74rem;color:var(--grey)}
+.section-head .status{margin-left:auto;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:20px}
+.status.met{background:var(--ok-bg);color:var(--ok)}
+.status.partial{background:var(--warn-bg);color:var(--warn)}
+.status.empty{background:var(--grey-pale);color:var(--grey)}
+
+table.courses{width:100%;border-collapse:collapse;font-size:.85rem}
+table.courses th{text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:.07em;color:var(--grey);padding:4px 8px;font-weight:600}
+table.courses td{padding:3px 8px;border-top:1px solid var(--grey-pale)}
+table.courses tr.course-row td{padding:5px 8px}
+.course-row.completed{background:var(--maroon);color:var(--white)}
+.course-row.completed input,.course-row.completed select{background:rgba(255,255,255,.15);color:var(--white);border-color:rgba(255,255,255,.3)}
+.course-row.completed input::placeholder{color:rgba(255,255,255,.6)}
+.course-row.misplaced{background:var(--err-bg)}
+.course-row.excess{background:var(--excess-bg)}
+table.courses input,table.courses select{width:100%;border:1px solid var(--line);border-radius:4px;padding:5px 7px;font-size:.83rem;background:var(--white)}
+.col-num{width:15%}.col-title{width:32%}.col-cr{width:9%}.col-grade{width:11%}.col-sem{width:14%}.col-notes{width:15%}.col-x{width:4%}
+.rowbtn{border:none;background:none;color:var(--grey-light);font-size:1rem;padding:2px 6px;line-height:1}
+.rowbtn:hover{color:var(--err)}
+.addcourse{margin:6px 12px 12px;background:var(--paper);border:1px dashed var(--line);color:var(--maroon);
+  padding:7px 14px;border-radius:5px;font-size:.8rem;font-weight:600;width:calc(100% - 24px)}
+.addcourse:hover{border-color:var(--maroon);background:var(--white)}
+.flag{font-size:.72rem;padding:4px 12px 8px;display:flex;align-items:center;gap:6px}
+.flag.misplaced-note{color:var(--err)}
+.flag.excess-note{color:var(--excess)}
+
+.picker-hint{font-size:.72rem;color:var(--grey);padding:0 18px 8px}
+
+/* aspirations */
+.asp-card{background:var(--white);border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.asp-card h3{font-size:.95rem;font-weight:700;margin-bottom:4px;color:var(--maroon-deep)}
+.asp-card p.hint{font-size:.78rem;color:var(--grey);margin-bottom:12px}
+
+/* internships */
+.intern{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--maroon);border-radius:6px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.intern .igrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.intern .del{float:right;border:none;background:none;color:var(--grey-light);font-size:1rem}
+.intern .del:hover{color:var(--err)}
+.addbtn{background:var(--maroon);color:var(--white);border:none;padding:9px 18px;border-radius:6px;font-weight:600;font-size:.85rem}
+.addbtn:hover{background:var(--maroon-bright)}
+
+/* backup chip */
+#backup{position:fixed;bottom:18px;right:18px;z-index:40;font-size:.72rem;font-weight:700;letter-spacing:.05em;
+  padding:9px 16px;border-radius:24px;border:1.5px solid;background:var(--white);box-shadow:var(--shadow)}
+#backup.ok{border-color:var(--ok);color:var(--ok);cursor:default}
+#backup.dirty{border-color:var(--maroon);color:var(--maroon);cursor:pointer;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.6}}
+
+.welcome{background:var(--maroon-deep);color:var(--white);border-radius:8px;padding:20px 24px;margin-bottom:20px}
+.welcome h2{font-family:Georgia,serif;font-size:1.2rem;margin-bottom:6px}
+.welcome p{font-size:.86rem;opacity:.92;line-height:1.55;margin-bottom:6px}
+.welcome button{margin-top:10px;background:var(--white);color:var(--maroon);border:none;padding:7px 16px;border-radius:5px;font-weight:600;font-size:.8rem}
+
+.empty-hint{color:var(--grey);font-size:.85rem;font-style:italic;padding:6px 0}
+@media(max-width:720px){
+  .info-grid,.intern .igrid{grid-template-columns:1fr}
+  table.courses{font-size:.78rem}
+  .col-title{width:auto}
+  .wrap{padding:18px 14px 90px}
+}
+</style>
+</head>
+<body>
+<header><div class="header-inner">
+  <h1>Degree Path</h1>
+  <span class="sub">NCCU History Major</span>
+  <div class="header-actions">
+    <button class="hbtn" id="btnImport">Import</button>
+    <button class="hbtn solid" id="btnExport">Export for Advisor</button>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <div class="welcome" id="welcome">
+    <h2>This is your degree, tracked.</h2>
+    <p>Enter the courses you have taken and plan to take. Degree Path checks each one against the History major requirements automatically — no color-coding by hand. It also holds your goals and internships.</p>
+    <p><strong>Your work saves in this browser.</strong> Use <em>Export for Advisor</em> to save a file you can email or bring to advising — that same file is your backup.</p>
+    <button id="welcomeDone">Got it</button>
+  </div>
+
+  <div class="dash" id="dash"></div>
+
+  <div class="tabbar" id="tabbar">
+    <button class="tab active" data-tab="progress">Degree Progress</button>
+    <button class="tab" data-tab="info">My Information</button>
+    <button class="tab" data-tab="goals">Goals &amp; Aspirations</button>
+    <button class="tab" data-tab="internships">Internships &amp; Opportunities</button>
+  </div>
+
+  <div class="panel active" id="panel-progress"></div>
+  <div class="panel" id="panel-info"></div>
+  <div class="panel" id="panel-goals"></div>
+  <div class="panel" id="panel-internships"></div>
+</div>
+
+<button id="backup" class="ok">Backed up</button>
+<input type="file" id="fileInput" accept=".json" hidden>
+
+<script>
+var CURRICULUM = {"major":"History","catalog":{"HIST 1100":{"number":"HIST 1100","title":"World Societies to 1650","valid":["Core Required"],"credits":3},"HIST 2000":{"number":"HIST 2000","title":"Historical Writing and Literature","valid":["Core Required","Writing Intensive"],"credits":3},"HIST 2210":{"number":"HIST 2210","title":"United States History to 1865","valid":["Core Required"],"credits":3},"HIST 2220":{"number":"HIST 2220","title":"United States History Since 1865","valid":["Core Required"],"credits":3},"HIST 2890":{"number":"HIST 2890","title":"Methods and Applications in History","valid":["Core Required"],"credits":3},"HIST 4010":{"number":"HIST 4010","title":"Seminar in European History","valid":["Seminar","European"],"credits":3},"HIST 4020":{"number":"HIST 4020","title":"Seminar in American History","valid":["Seminar"],"credits":3},"HIST 4040":{"number":"HIST 4040","title":"Seminar in African History","valid":["Seminar","African"],"credits":3},"HIST 4050":{"number":"HIST 4050","title":"Seminar in African American History","valid":["Seminar"],"credits":3},"HIST 4060":{"number":"HIST 4060","title":"Seminar in Latin American History","valid":["Seminar","Latin American"],"credits":3},"HIST 4070":{"number":"HIST 4070","title":"Seminar in the African Diaspora","valid":["Seminar"],"credits":3},"HIST 2410":{"number":"HIST 2410","title":"African History to 1800","valid":["African","Elective"],"credits":3},"HIST 2420":{"number":"HIST 2420","title":"African History Since 1800","valid":["African","Elective"],"credits":3},"HIST 3040":{"number":"HIST 3040","title":"Topics in African History","valid":["African","Elective"],"credits":3},"HIST 3410":{"number":"HIST 3410","title":"Ancient Africa","valid":["African","Elective"],"credits":3},"HIST 3420":{"number":"HIST 3420","title":"State Formation in Pre-Colonial Africa","valid":["African","Elective"],"credits":3},"HIST 3430":{"number":"HIST 3430","title":"Africa Under Colonial Rule","valid":["African","Elective"],"credits":3},"HIST 3440":{"number":"HIST 3440","title":"Africa Since Independence","valid":["African","Elective"],"credits":3},"HIST 3450":{"number":"HIST 3450","title":"African Economic History","valid":["African","Elective"],"credits":3},"HIST 4400":{"number":"HIST 4400","title":"Independent Readings in African History","valid":["African","Elective"],"credits":3},"HIST 4450":{"number":"HIST 4450","title":"History of Contemporary South Africa","valid":["African","Elective"],"credits":3},"HIST 4470":{"number":"HIST 4470","title":"History of Pan-Africanism to 1963","valid":["African","Elective"],"credits":3},"HIST 3010":{"number":"HIST 3010","title":"Problems in European History","valid":["European","Elective"],"credits":3},"HIST 3100":{"number":"HIST 3100","title":"Independent Readings in European History","valid":["European","Elective"],"credits":3},"HIST 3115":{"number":"HIST 3115","title":"Europe, 1500-1815","valid":["European","Elective"],"credits":3},"HIST 3118":{"number":"HIST 3118","title":"Europe, 1815-1914","valid":["European","Elective"],"credits":3},"HIST 3145":{"number":"HIST 3145","title":"History of Russia to the Revolution","valid":["European","Elective"],"credits":3},"HIST 3150":{"number":"HIST 3150","title":"History of England to 1688","valid":["European","Elective"],"credits":3},"HIST 3160":{"number":"HIST 3160","title":"History of England since 1688","valid":["European","Elective"],"credits":3},"HIST 3180":{"number":"HIST 3180","title":"History of France since the Enlightenment","valid":["European","Elective"],"credits":3},"HIST 4110":{"number":"HIST 4110","title":"Europe Since 1914","valid":["European","Elective"],"credits":3},"HIST 4120":{"number":"HIST 4120","title":"European Diplomatic History, 1879 to Present","valid":["European","Elective"],"credits":3},"HIST 4140":{"number":"HIST 4140","title":"The Revolutionary Era and Napoleon","valid":["European","Elective"],"credits":3},"HIST 4150":{"number":"HIST 4150","title":"European Intellectual History","valid":["European","Elective"],"credits":3},"HIST 4160":{"number":"HIST 4160","title":"The African Presence in Europe","valid":["European","Elective"],"credits":3},"HIST 4170":{"number":"HIST 4170","title":"The New Europeans: Race and Minorities","valid":["European","Elective"],"credits":3},"HIST 2610":{"number":"HIST 2610","title":"Latin America: Colonial Period, 1480-1820","valid":["Latin American","Elective"],"credits":3},"HIST 2620":{"number":"HIST 2620","title":"Latin America: The National Period","valid":["Latin American","Elective"],"credits":3},"HIST 3600":{"number":"HIST 3600","title":"Independent Readings in Latin American History","valid":["Latin American","Elective"],"credits":3},"HIST 4620":{"number":"HIST 4620","title":"Latin American Revolution","valid":["Latin American","Elective"],"credits":3},"HIST 4630":{"number":"HIST 4630","title":"The African Presence in Latin America","valid":["Latin American","Elective"],"credits":3},"HIST 4640":{"number":"HIST 4640","title":"Latin American History Through Literature/Film","valid":["Latin American","Elective"],"credits":3},"HIST 2080":{"number":"HIST 2080","title":"History of Women to 1750","valid":["Elective"],"credits":3},"HIST 2081":{"number":"HIST 2081","title":"History of Women Since 1750","valid":["Elective"],"credits":3},"HIST 2110":{"number":"HIST 2110","title":"Ancient History","valid":["Elective"],"credits":3},"HIST 2120":{"number":"HIST 2120","title":"Medieval History","valid":["Elective"],"credits":3},"HIST 2910":{"number":"HIST 2910","title":"South Asia Prior to 1750","valid":["Elective"],"credits":3},"HIST 3020":{"number":"HIST 3020","title":"Problems in American History","valid":["Elective"],"credits":3},"HIST 3070":{"number":"HIST 3070","title":"Topics in the African Diaspora","valid":["Elective"],"credits":3},"HIST 3210":{"number":"HIST 3210","title":"American Military History","valid":["Elective"],"credits":3},"HIST 3220":{"number":"HIST 3220","title":"Recent United States History","valid":["Elective"],"credits":3},"HIST 3230":{"number":"HIST 3230","title":"American Urban History","valid":["Elective"],"credits":3},"HIST 3250":{"number":"HIST 3250","title":"American Economic History","valid":["Elective"],"credits":3},"HIST 3260":{"number":"HIST 3260","title":"American Labor History","valid":["Elective"],"credits":3},"HIST 3500":{"number":"HIST 3500","title":"Independent Readings in African American History","valid":["Elective"],"credits":3},"HIST 3510":{"number":"HIST 3510","title":"African American History to 1865","valid":["Elective"],"credits":3},"HIST 3520":{"number":"HIST 3520","title":"African American History Since 1865","valid":["Elective"],"credits":3},"HIST 3630":{"number":"HIST 3630","title":"History of Central America","valid":["Elective"],"credits":3},"HIST 3710":{"number":"HIST 3710","title":"Introduction to African Diaspora History","valid":["Elective"],"credits":3},"HIST 3900":{"number":"HIST 3900","title":"Internship in Historical Studies","valid":["Elective"],"credits":3},"HIST 3910":{"number":"HIST 3910","title":"South Asia Under British Rule, 1750-1885","valid":["Elective"],"credits":3},"HIST 3920":{"number":"HIST 3920","title":"Unmaking of British Empire in India, 1885-1947","valid":["Elective"],"credits":3},"HIST 4130":{"number":"HIST 4130","title":"Renaissance, Reformation, and Expansion","valid":["Elective"],"credits":3},"HIST 4200":{"number":"HIST 4200","title":"Independent Readings in American History","valid":["Elective"],"credits":3},"HIST 4210":{"number":"HIST 4210","title":"Foreign Relations of the United States","valid":["Elective"],"credits":3},"HIST 4230":{"number":"HIST 4230","title":"Constitutional History of the United States","valid":["Elective"],"credits":3},"HIST 4310":{"number":"HIST 4310","title":"History of North Carolina","valid":["Elective"],"credits":3},"HIST 4510":{"number":"HIST 4510","title":"Modern African American History Since 1900","valid":["Elective"],"credits":3},"HIST 4610":{"number":"HIST 4610","title":"History of the Caribbean","valid":["Elective"],"credits":3},"HIST 4755":{"number":"HIST 4755","title":"Topics in African Diaspora History","valid":["Elective"],"credits":3},"HIST 4810":{"number":"HIST 4810","title":"Oral History-Theory","valid":["Elective"],"credits":3},"HIST 4910":{"number":"HIST 4910","title":"Comparative Slavery","valid":["Elective"],"credits":3},"HIST 4940":{"number":"HIST 4940","title":"Fiction, Film and South Asia's Past","valid":["Elective"],"credits":3},"HIST 1320":{"number":"HIST 1320","title":"World Societies","valid":["GE Social Science (Required)"]},"HIST 1530":{"number":"HIST 1530","title":"The Black Experience to 1865","valid":["GE Social Science"]},"HIST 1540":{"number":"HIST 1540","title":"The Black Experience Since 1865","valid":["GE Social Science"]}},"ge_catalog":[{"number":"ENG 1110","title":"English Composition I","credits":3,"section":"English Composition"},{"number":"ENG 1210","title":"English Composition II","credits":3,"section":"English Composition"},{"number":"SPAN 1192","title":"Elementary Spanish II","credits":3,"section":"Foreign Language"},{"number":"FREN 1192","title":"Elementary French II","credits":3,"section":"Foreign Language"},{"number":"GERM 1192","title":"Elementary German II","credits":3,"section":"Foreign Language"},{"number":"MFL 1192","title":"Critical Language II","credits":3,"section":"Foreign Language"},{"number":"MATH 1080","title":"Mathematics for Liberal Arts & Social Sciences","credits":3,"section":"Mathematics"},{"number":"MATH 1100","title":"College Algebra and Trigonometry I","credits":3,"section":"Mathematics"},{"number":"MATH 1110","title":"Elementary Statistics","credits":3,"section":"Mathematics"},{"number":"MATH 1200","title":"College Algebra and Trigonometry II","credits":3,"section":"Mathematics"},{"number":"MATH 1210","title":"Finite Mathematics","credits":3,"section":"Mathematics"},{"number":"MATH 1410","title":"Pre-Calculus Mathematics","credits":5,"section":"Mathematics"},{"number":"BIOL 1000","title":"Heredity and Society","credits":3,"section":"Science"},{"number":"BIOL 1100","title":"General Biology","credits":3,"section":"Science"},{"number":"BIOL 1300","title":"Molecules and Cell Function","credits":4,"section":"Science"},{"number":"BIOL 2105","title":"Biology/Chemistry. Intro to Computational Science and Informatics","credits":3,"section":"Science"},{"number":"CHEM 1000","title":"Physical Science Related to Chem","credits":3,"section":"Science"},{"number":"CHEM 1100","title":"General Chemistry I","credits":4,"section":"Science"},{"number":"CHEM 1200","title":"General Chemistry II","credits":4,"section":"Science"},{"number":"CHEM 1500","title":"Chemistry and Human Life","credits":3,"section":"Science"},{"number":"CHEM 2105","title":"Computational Science & Informatics","credits":3,"section":"Science"},{"number":"GEOG 2010","title":"Online Weather","credits":3,"section":"Science"},{"number":"GEOG 2100","title":"Physical Geography","credits":3,"section":"Science"},{"number":"GEOG 2120","title":"Geology","credits":3,"section":"Science"},{"number":"GEOG 2350","title":"Earth Science","credits":3,"section":"Science"},{"number":"PHYS 1000","title":"Physics w/ Application to Enviro Topics","credits":3,"section":"Science"},{"number":"PHYS 1210","title":"The Language of Science","credits":3,"section":"Science"},{"number":"PHYS 1050","title":"Astronomy","credits":3,"section":"Science"},{"number":"SCI 1220","title":"Science Odyssey","credits":4,"section":"Science"},{"number":"STEM 1200","title":"Scientific Decisions in Everyday Life","credits":3,"section":"Science"},{"number":"ENSC 1000","title":"Intro to Sustainable Planet","credits":3,"section":"Science"},{"number":"HIST 1320","title":"World Societies (REQUIRED)","credits":3,"section":"Social Science"},{"number":"HIST 1530","title":"The Black Experience to 1865","credits":3,"section":"Social Science"},{"number":"HIST 1540","title":"The Black Experience Since 1865","credits":3,"section":"Social Science"},{"number":"ECON 2200","title":"Principles of Macroeconomics","credits":3,"section":"Social Science"},{"number":"ECON 2100","title":"Principles of Microeconomics","credits":3,"section":"Social Science"},{"number":"GEOG 1000","title":"Intro to Geography","credits":3,"section":"Social Science"},{"number":"GEOG 1100","title":"World Regional Geography","credits":3,"section":"Social Science"},{"number":"GLST 1000","title":"The Global Experience","credits":3,"section":"Social Science"},{"number":"POLS 2100","title":"American Government","credits":3,"section":"Social Science"},{"number":"PSY 2100","title":"General Psychology","credits":3,"section":"Social Science"},{"number":"SOCI 2000","title":"Global Societies and Human Behavior","credits":3,"section":"Social Science"},{"number":"SOCI 2100","title":"Principles of Sociology","credits":3,"section":"Social Science"},{"number":"SOCI 2300","title":"Social Problems","credits":3,"section":"Social Science"},{"number":"HUM 2410","title":"Arts & Humanities I (One Required)","credits":3,"section":"Arts & Humanities"},{"number":"HUM 2420","title":"Arts & Humanities II (One Required)","credits":3,"section":"Arts & Humanities"},{"number":"ART 1000","title":"Intro to the Study of Art","credits":2,"section":"Arts & Humanities"},{"number":"ART 3200","title":"African-American Art History","credits":4,"section":"Arts & Humanities"},{"number":"ART 1500","title":"Survey of the History of Art","credits":3,"section":"Arts & Humanities"},{"number":"DRAM 1000","title":"Appreciation of Drama","credits":2,"section":"Arts & Humanities"},{"number":"DRAM 2110","title":"History of the Theatre I","credits":3,"section":"Arts & Humanities"},{"number":"DRAM 2120","title":"History of the Theatre II","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1300","title":"World Literature I","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1400","title":"World Literature II","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1500","title":"Writing about Literature","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1700","title":"Religion and Literature","credits":3,"section":"Arts & Humanities"},{"number":"ENG 2340","title":"Contemporary African American Literature","credits":3,"section":"Arts & Humanities"},{"number":"FREN 2300","title":"Intro to Francophone Literature","credits":3,"section":"Arts & Humanities"},{"number":"GERM 2104","title":"Intro to German Civilization","credits":3,"section":"Arts & Humanities"},{"number":"GERM 2105","title":"Intro to German Literature","credits":3,"section":"Arts & Humanities"},{"number":"MUSL 1000","title":"Survey of Music","credits":3,"section":"Arts & Humanities"},{"number":"MUSL 1300","title":"Twentieth-Century Music","credits":2,"section":"Arts & Humanities"},{"number":"PHIL 1000","title":"Intro to Philosophy","credits":3,"section":"Arts & Humanities"},{"number":"PHIL 2210","title":"Ethics","credits":3,"section":"Arts & Humanities"},{"number":"SPAN 2300","title":"Intro to Hispanic Literature","credits":3,"section":"Arts & Humanities"},{"number":"SPAN 3300","title":"Intro to African-Hispanic Literature","credits":3,"section":"Arts & Humanities"},{"number":"HEDU 1531","title":"Health (REQUIRED)","credits":2,"section":"Health & Wellness"},{"number":"KIN 1541","title":"Fitness (REQUIRED)","credits":2,"section":"Health & Wellness"},{"number":"UNIV 1100","title":"First Year Seminar","credits":2,"section":"Social & Career Enhancement"},{"number":"HIST 2000","title":"Historical Writing and Literature (Fulfills for History Majors)","credits":3,"section":"Writing Intensive"},{"number":"MSCM 1250","title":"Elements of Speech Communication (Recommended)","credits":3,"section":"Speaking Intensive"},{"number":"MSCM 2200","title":"Introduction to Public Speaking (Recommended)","credits":3,"section":"Speaking Intensive"}],"requirements":{"ge":{"label":"General Education","total":39,"sections":[{"id":"foreign_lang","label":"Foreign Language","hours":3,"rule":"exactly","note":"3 hrs"},{"id":"eng_comp","label":"English Composition","hours":6,"rule":"exactly","note":"ENG 1110 & 1210, both required"},{"id":"math","label":"Mathematics","hours":3,"rule":"min","note":"3-5 hrs, choose one"},{"id":"science","label":"Science","hours":6,"rule":"min","note":"6-8 hrs, choose two"},{"id":"social_science","label":"Social Science","hours":6,"rule":"exactly","note":"HIST 1320 required + one more"},{"id":"arts_hum","label":"Arts & Humanities","hours":5,"rule":"min","note":"5-6 hrs, one HUM required"},{"id":"health","label":"Health & Wellness","hours":4,"rule":"exactly","note":"HEDU 1531 & KIN 1541"},{"id":"career","label":"Social & Career Enhancement","hours":2,"rule":"exactly","note":"UNIV 1100"},{"id":"writing_int","label":"Writing Intensive","hours":0,"rule":"flag","note":"HIST 2000 (counts in core)"},{"id":"speaking_int","label":"Speaking Intensive","hours":3,"rule":"exactly","note":"MSCM 1250 or 2200"}]},"core":{"label":"History Major Core","total":24,"sections":[{"id":"core_required","label":"Required Core Courses","hours":15,"rule":"list","required":["HIST 1100","HIST 2000","HIST 2210","HIST 2220","HIST 2890"],"note":"All five required"},{"id":"seminar","label":"Seminar","hours":3,"rule":"choose","tag":"Seminar","note":"Choose one"},{"id":"african","label":"African History","hours":3,"rule":"choose","tag":"African","note":"Choose one"},{"id":"european","label":"European History","hours":3,"rule":"choose","tag":"European","note":"Choose one"},{"id":"latin_american","label":"Latin American History","hours":3,"rule":"choose","tag":"Latin American","note":"Choose one"}]},"electives":{"label":"History & General Electives","total":18,"sections":[{"id":"electives","label":"Electives (2000-level or above)","hours":18,"rule":"fill","tag":"Elective","note":"18 hrs"}]}},"degree":{"total":120,"community_engagement":120}};
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- storage (guarded) ---------- */
+var mem={};
+function sget(k){try{return localStorage.getItem(k);}catch(e){return mem[k]||null;}}
+function sset(k,v){try{localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+var KEY="degreepath_student_v1", DIRTY=KEY+"_dirty";
+
+/* ---------- state ---------- */
+var C=CURRICULUM;
+var state=null;
+
+function blank(){
+  return {
+    schemaVersion:1,
+    info:{name:"",bannerId:"",email:"",expectedGrad:"",advisor:"",catalogYear:""},
+    courses:{},           // sectionId -> [ {number,title,credits,grade,semester,notes} ]
+    goals:{career:"",gradSchool:"",whyHistory:"",skills:"",other:""},
+    internships:[],       // {org,role,term,hours,status,notes}
+    communityHours:""
+  };
+}
+function load(){
+  var raw=sget(KEY);
+  if(raw){try{state=JSON.parse(raw);}catch(e){state=null;}}
+  if(!state) state=blank();
+  // ensure section arrays exist
+  allSections().forEach(function(s){ if(!state.courses[s.id]) state.courses[s.id]=[]; });
+}
+function save(){ sset(KEY,JSON.stringify(state)); markDirty(); }
+
+/* ---------- backup chip ---------- */
+function markDirty(){ sset(DIRTY,"1"); paintBackup(); }
+function markClean(){ sset(DIRTY,"0"); paintBackup(); }
+function paintBackup(){
+  var el=document.getElementById("backup");
+  var d=sget(DIRTY)==="1";
+  el.className=d?"dirty":"ok";
+  el.textContent=d?"\u26A0 Export to back up":"Backed up";
+}
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function allBlocks(){ return [C.requirements.ge, C.requirements.core, C.requirements.electives]; }
+function allSections(){ var o=[]; allBlocks().forEach(function(b){b.sections.forEach(function(s){o.push(s);});}); return o; }
+function findCourse(num){ if(!num)return null; num=num.trim().toUpperCase(); return C.catalog[num]||null; }
+function geCourse(num){ if(!num)return null; num=num.trim().toUpperCase(); return C.ge_catalog.find(function(g){return g.number.toUpperCase()===num;})||null; }
+function num(v){ var n=parseFloat(v); return isNaN(n)?0:n; }
+function isPassing(g){ if(!g)return false; g=g.trim().toUpperCase(); if(["F","W","WF","I","NC"].indexOf(g)>-1)return false; return true; }
+
+/* credits earned in a section = sum of credit hours of rows with a passing grade */
+function sectionEarned(secId){
+  return (state.courses[secId]||[]).reduce(function(t,c){
+    return t + (isPassing(c.grade)? num(c.credits):0);
+  },0);
+}
+function sectionPlanned(secId){
+  return (state.courses[secId]||[]).reduce(function(t,c){ return t+num(c.credits); },0);
+}
+
+/* is a course validly placed in this section? returns true/false/null(unknown) */
+function validPlacement(sec, course){
+  var cat=findCourse(course.number);
+  // GE sections: validate against GE catalog section name
+  if(isGeSection(sec.id)){
+    var g=geCourse(course.number);
+    if(!g) return null; // unknown course, don't flag
+    return g.section===sec.label || (sec.id==="writing_int"&&course.number.toUpperCase()==="HIST 2000")
+      || (sec.id==="speaking_int"&&/MSCM/.test(course.number.toUpperCase()));
+  }
+  if(!cat) return null; // not a known HIST course; leave unflagged
+  if(sec.rule==="list"){ return sec.required.indexOf(cat.number)>-1; }
+  if(sec.rule==="choose"){ return cat.valid.indexOf(sec.tag)>-1; }
+  if(sec.rule==="fill"){ return cat.valid.indexOf("Elective")>-1 || cat.valid.some(function(v){return v!=="Core Required";}); }
+  return null;
+}
+function isGeSection(id){ return C.requirements.ge.sections.some(function(s){return s.id===id;}); }
+
+/* ---------- dashboard ---------- */
+function totalEarned(){
+  var ge=0,core=0,el=0;
+  C.requirements.ge.sections.forEach(function(s){ if(s.id!=="writing_int") ge+=sectionEarned(s.id); });
+  C.requirements.core.sections.forEach(function(s){ core+=sectionEarned(s.id); });
+  C.requirements.electives.sections.forEach(function(s){ el+=sectionEarned(s.id); });
+  return {ge:ge,core:core,el:el,total:ge+core+el};
+}
+function renderDash(){
+  var t=totalEarned();
+  var d=[
+    {lbl:"Total Credits",num:t.total,of:C.degree.total},
+    {lbl:"General Education",num:t.ge,of:C.requirements.ge.total},
+    {lbl:"Major Core",num:t.core,of:C.requirements.core.total},
+    {lbl:"Electives",num:t.el,of:C.requirements.electives.total},
+    {lbl:"Community Hrs",num:num(state.communityHours),of:C.degree.community_engagement}
+  ];
+  document.getElementById("dash").innerHTML=d.map(function(x){
+    var pct=Math.min(100,Math.round(x.num/x.of*100));
+    var done=x.num>=x.of;
+    return '<div class="stat'+(done?' done':'')+'"><div class="num">'+x.num+'<span style="font-size:.9rem;color:var(--grey-light)">/'+x.of+'</span></div>'+
+      '<div class="lbl">'+x.lbl+'</div><div class="bar"><span style="width:'+pct+'%"></span></div></div>';
+  }).join("");
+}
+
+/* ---------- progress panel ---------- */
+function renderProgress(){
+  var html="";
+  allBlocks().forEach(function(block){
+    var earned=block.sections.reduce(function(t,s){return t+(s.id==="writing_int"?0:sectionEarned(s.id));},0);
+    html+='<div class="reqblock"><h3>'+esc(block.label)+
+      '<span class="credits">'+earned+' / '+block.total+' hrs</span></h3>';
+    block.sections.forEach(function(sec){ html+=renderSection(sec); });
+    html+='</div>';
+  });
+  var p=document.getElementById("panel-progress");
+  p.innerHTML=html;
+}
+
+function renderSection(sec){
+  var rows=state.courses[sec.id]||[];
+  var earned=sectionEarned(sec.id);
+  var need=sec.hours;
+  var status,statusCls;
+  if(sec.rule==="flag"){
+    var hasIt=rows.some(function(c){return isPassing(c.grade);});
+    status=hasIt?"\u2713 On record":"Needed"; statusCls=hasIt?"met":"empty";
+  } else if(earned>=need && need>0){ status="\u2713 Met"; statusCls="met"; }
+  else if(earned>0){ status=earned+"/"+need+" hrs"; statusCls="partial"; }
+  else { status="Not started"; statusCls="empty"; }
+
+  var h='<div class="section"><div class="section-head">'+
+    '<span class="sname">'+esc(sec.label)+'</span>'+
+    '<span class="snote">'+esc(sec.note||"")+'</span>'+
+    '<span class="status '+statusCls+'">'+status+'</span></div>';
+
+  // suggestion hint for choose/list
+  if(sec.rule==="list"){
+    var have=rows.map(function(c){return (c.number||"").toUpperCase();});
+    var missing=sec.required.filter(function(r){return have.indexOf(r)<0;});
+    if(missing.length) h+='<div class="picker-hint">Still needed: '+missing.map(function(m){
+      var c=C.catalog[m]; return esc(m+(c?" "+c.title:""));}).join(" \u00B7 ")+'</div>';
+  }
+
+  h+='<table class="courses"><thead><tr>'+
+    '<th class="col-num">Course #</th><th class="col-title">Title</th><th class="col-cr">Hrs</th>'+
+    '<th class="col-grade">Grade</th><th class="col-sem">Semester</th><th class="col-notes">Notes</th><th class="col-x"></th>'+
+    '</tr></thead><tbody>';
+
+  rows.forEach(function(c,i){
+    var valid=validPlacement(sec,c);
+    var passing=isPassing(c.grade);
+    var cls="course-row";
+    if(valid===false) cls+=" misplaced";
+    else if(passing) cls+=" completed";
+    h+='<tr class="'+cls+'" data-sec="'+sec.id+'" data-i="'+i+'">'+
+      '<td><input class="f-number" value="'+esc(c.number)+'" placeholder="HIST 0000"></td>'+
+      '<td><input class="f-title" value="'+esc(c.title)+'" placeholder="auto-fills"></td>'+
+      '<td><input class="f-credits" value="'+esc(c.credits)+'" inputmode="decimal"></td>'+
+      '<td><input class="f-grade" value="'+esc(c.grade)+'" placeholder="\u2014"></td>'+
+      '<td><input class="f-semester" value="'+esc(c.semester)+'" placeholder="Fa 25"></td>'+
+      '<td><input class="f-notes" value="'+esc(c.notes)+'"></td>'+
+      '<td><button class="rowbtn" data-del="1" title="Remove">\u00D7</button></td>'+
+      '</tr>';
+    if(valid===false){
+      h+='<tr><td colspan="7"><div class="flag misplaced-note">\u26A0 '+esc(c.number)+
+        ' may not satisfy '+esc(sec.label)+'. Check placement.</div></td></tr>';
+    }
+  });
+  h+='</tbody></table>';
+  h+='<button class="addcourse" data-add="'+sec.id+'">+ Add course</button>';
+  h+='</div>';
+  return h;
+}
+
+/* excess: mark elective rows beyond 18 as excess (informational) */
+function markExcess(){
+  var secId="electives";
+  var rows=state.courses[secId]||[];
+  var run=0;
+  var trs=document.querySelectorAll('tr[data-sec="'+secId+'"]');
+  rows.forEach(function(c,i){
+    if(isPassing(c.grade)){
+      run+=num(c.credits);
+      var tr=document.querySelector('tr[data-sec="'+secId+'"][data-i="'+i+'"]');
+      if(tr && run>C.requirements.electives.total && !tr.classList.contains("misplaced")){
+        tr.classList.remove("completed"); tr.classList.add("excess");
+      }
+    }
+  });
+}
+
+/* ---------- panel wiring ---------- */
+function wireProgress(){
+  var p=document.getElementById("panel-progress");
+  p.addEventListener("input",function(e){
+    var tr=e.target.closest("tr[data-sec]"); if(!tr)return;
+    var sec=tr.getAttribute("data-sec"), i=+tr.getAttribute("data-i");
+    var row=state.courses[sec][i]; if(!row)return;
+    var cls=e.target.className;
+    if(cls.indexOf("f-number")>-1){
+      row.number=e.target.value;
+      var found=findCourse(row.number)||geCourse(row.number);
+      if(found){
+        var titleInput=tr.querySelector(".f-title"), crInput=tr.querySelector(".f-credits");
+        if(!row.title){ row.title=found.title; titleInput.value=found.title; }
+        if(!row.credits && found.credits){ row.credits=found.credits; crInput.value=found.credits; }
+      }
+    }
+    else if(cls.indexOf("f-title")>-1) row.title=e.target.value;
+    else if(cls.indexOf("f-credits")>-1) row.credits=e.target.value;
+    else if(cls.indexOf("f-grade")>-1) row.grade=e.target.value;
+    else if(cls.indexOf("f-semester")>-1) row.semester=e.target.value;
+    else if(cls.indexOf("f-notes")>-1) row.notes=e.target.value;
+    save();
+    // light refresh: recolor this row + dashboard without full re-render (keep focus)
+    var course=state.courses[sec][i];
+    var secObj=allSections().find(function(s){return s.id===sec;});
+    var valid=validPlacement(secObj,course), passing=isPassing(course.grade);
+    tr.className="course-row"+(valid===false?" misplaced":(passing?" completed":""));
+    renderDash();
+    updateSectionStatus(sec);
+  });
+  p.addEventListener("click",function(e){
+    var add=e.target.closest("[data-add]");
+    if(add){
+      var sid=add.getAttribute("data-add");
+      state.courses[sid].push({number:"",title:"",credits:"",grade:"",semester:"",notes:""});
+      save(); renderProgress(); renderDash();
+      // focus the new row's first input
+      var rows=document.querySelectorAll('tr[data-sec="'+sid+'"]');
+      if(rows.length){ rows[rows.length-1].querySelector(".f-number").focus(); }
+      return;
+    }
+    var del=e.target.closest("[data-del]");
+    if(del){
+      var tr=del.closest("tr[data-sec]");
+      var sec=tr.getAttribute("data-sec"), i=+tr.getAttribute("data-i");
+      state.courses[sec].splice(i,1);
+      save(); renderProgress(); renderDash();
+    }
+  });
+}
+function updateSectionStatus(secId){
+  // re-render just the progress panel's affected block statuses cheaply
+  markExcess();
+}
+
+/* ---------- info panel ---------- */
+function renderInfo(){
+  var f=state.info;
+  document.getElementById("panel-info").innerHTML=
+  '<div class="info-card"><div class="info-grid">'+
+    infoField("name","Student Name")+
+    infoField("bannerId","Banner ID")+
+    infoField("email","Email")+
+    infoField("expectedGrad","Expected Graduation")+
+    infoField("advisor","Advisor")+
+    infoField("catalogYear","Catalog Year")+
+  '</div></div>'+
+  '<div class="info-card"><div class="fld"><label>Community Engagement Hours (120 required)</label>'+
+    '<input id="commHours" value="'+esc(state.communityHours)+'" inputmode="numeric" placeholder="0"></div></div>';
+}
+function infoField(k,label){
+  return '<div class="fld"><label>'+label+'</label><input data-info="'+k+'" value="'+esc(state.info[k])+'"></div>';
+}
+function wireInfo(){
+  var p=document.getElementById("panel-info");
+  p.addEventListener("input",function(e){
+    var k=e.target.getAttribute("data-info");
+    if(k){ state.info[k]=e.target.value; save(); return; }
+    if(e.target.id==="commHours"){ state.communityHours=e.target.value; save(); renderDash(); }
+  });
+}
+
+/* ---------- goals panel ---------- */
+function renderGoals(){
+  var g=state.goals;
+  document.getElementById("panel-goals").innerHTML=
+  goalCard("whyHistory","Why history?","What drew you to the major, and what do you hope to do with it?")+
+  goalCard("career","Career aspirations","Fields, roles, or paths you're considering \u2014 teaching, law, archives, public history, anything.")+
+  goalCard("gradSchool","Graduate school plans","Programs, degrees, or schools you're aiming toward, if any.")+
+  goalCard("skills","Skills you want to build","Research, languages, digital methods, writing \u2014 what you want to grow before you graduate.")+
+  goalCard("other","Anything else for your advisor","Questions, concerns, or context you'd like your advisor to know.");
+}
+function goalCard(k,title,hint){
+  return '<div class="asp-card"><h3>'+esc(title)+'</h3><p class="hint">'+esc(hint)+'</p>'+
+    '<div class="fld"><textarea data-goal="'+k+'" placeholder="Your notes\u2026">'+esc(state.goals[k])+'</textarea></div></div>';
+}
+function wireGoals(){
+  document.getElementById("panel-goals").addEventListener("input",function(e){
+    var k=e.target.getAttribute("data-goal");
+    if(k){ state.goals[k]=e.target.value; save(); }
+  });
+}
+
+/* ---------- internships panel ---------- */
+function renderInternships(){
+  var html='<div class="asp-card"><h3>Internships &amp; Opportunities</h3>'+
+    '<p class="hint">Internships, fellowships, research assistantships, conferences, study abroad \u2014 anything beyond the classroom. HIST 3900 (Internship in Historical Studies) can count as an elective.</p>'+
+    '<button class="addbtn" id="addIntern">+ Add opportunity</button></div>';
+  if(state.internships.length===0){
+    html+='<p class="empty-hint">Nothing added yet.</p>';
+  }
+  state.internships.forEach(function(it,i){
+    html+='<div class="intern" data-i="'+i+'">'+
+      '<button class="del" data-delintern="'+i+'" title="Remove">\u00D7</button>'+
+      '<div class="igrid">'+
+        ifield(i,"org","Organization")+
+        ifield(i,"role","Role / Title")+
+        ifield(i,"term","Term / Dates")+
+        ifield(i,"hours","Hours")+
+      '</div>'+
+      '<div class="fld" style="margin-top:10px"><label>Status</label>'+
+        '<select data-intern="'+i+'" data-k="status">'+
+          statusOpt(it.status,"Interested")+statusOpt(it.status,"Applied")+
+          statusOpt(it.status,"Accepted")+statusOpt(it.status,"Completed")+
+        '</select></div>'+
+      '<div class="fld" style="margin-top:10px"><label>Notes</label>'+
+        '<textarea data-intern="'+i+'" data-k="notes">'+esc(it.notes)+'</textarea></div>'+
+      '</div>';
+  });
+  document.getElementById("panel-internships").innerHTML=html;
+}
+function ifield(i,k,label){
+  return '<div class="fld"><label>'+label+'</label><input data-intern="'+i+'" data-k="'+k+'" value="'+esc(state.internships[i][k])+'"></div>';
+}
+function statusOpt(cur,val){ return '<option'+(cur===val?' selected':'')+'>'+val+'</option>'; }
+function wireInternships(){
+  var p=document.getElementById("panel-internships");
+  p.addEventListener("click",function(e){
+    if(e.target.id==="addIntern"){
+      state.internships.push({org:"",role:"",term:"",hours:"",status:"Interested",notes:""});
+      save(); renderInternships(); return;
+    }
+    var del=e.target.getAttribute("data-delintern");
+    if(del!==null){ state.internships.splice(+del,1); save(); renderInternships(); }
+  });
+  p.addEventListener("input",function(e){
+    var i=e.target.getAttribute("data-intern");
+    if(i===null)return;
+    var k=e.target.getAttribute("data-k");
+    state.internships[+i][k]=e.target.value; save();
+  });
+}
+
+/* ---------- tabs ---------- */
+document.getElementById("tabbar").addEventListener("click",function(e){
+  var t=e.target.closest(".tab"); if(!t)return;
+  document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
+  t.classList.add("active");
+  var name=t.getAttribute("data-tab");
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+  document.getElementById("panel-"+name).classList.add("active");
+});
+
+/* ---------- export / import ---------- */
+function fname(){
+  var n=(state.info.name||"student").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  return "degree-path-"+n+".json";
+}
+function doExport(){
+  var payload=Object.assign({},state,{
+    _kind:"nccu-degree-path",_exported:new Date().toISOString(),
+    _summary:totalEarned()
+  });
+  var json=JSON.stringify(payload,null,2);
+  if(window.showSaveFilePicker){
+    window.showSaveFilePicker({suggestedName:fname(),
+      types:[{description:"Degree Path file",accept:{"application/json":[".json"]}}]})
+      .then(function(h){return h.createWritable().then(function(w){return w.write(json).then(function(){return w.close();});});})
+      .then(markClean).catch(function(err){ if(err&&err.name==="AbortError")return; fallback(json); markClean(); });
+  } else { fallback(json); markClean(); }
+}
+function fallback(json){
+  var b=new Blob([json],{type:"application/json"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download=fname(); a.click(); URL.revokeObjectURL(a.href);
+}
+document.getElementById("btnExport").addEventListener("click",doExport);
+document.getElementById("backup").addEventListener("click",function(){ if(sget(DIRTY)==="1") doExport(); });
+document.getElementById("btnImport").addEventListener("click",function(){ document.getElementById("fileInput").click(); });
+document.getElementById("fileInput").addEventListener("change",function(e){
+  var f=e.target.files[0]; if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var d=JSON.parse(r.result);
+      if(!d.courses||!d.info) throw new Error("shape");
+      // keep only known keys
+      state=Object.assign(blank(),{info:d.info,courses:d.courses,goals:d.goals||blank().goals,
+        internships:d.internships||[],communityHours:d.communityHours||""});
+      allSections().forEach(function(s){ if(!state.courses[s.id]) state.courses[s.id]=[]; });
+      save(); renderAll();
+    }catch(err){ alert("That file isn't a Degree Path export."); }
+  };
+  r.readAsText(f); e.target.value="";
+});
+
+/* ---------- welcome ---------- */
+if(sget("degreepath_welcomed")==="1"){ var w=document.getElementById("welcome"); if(w)w.remove(); }
+var wd=document.getElementById("welcomeDone");
+if(wd) wd.addEventListener("click",function(){ sset("degreepath_welcomed","1"); document.getElementById("welcome").remove(); });
+
+/* ---------- init ---------- */
+function renderAll(){
+  renderDash(); renderProgress(); renderInfo(); renderGoals(); renderInternships();
+  markExcess(); paintBackup();
+}
+load();
+renderAll();
+wireProgress(); wireInfo(); wireGoals(); wireInternships();
+})();
+
+</script>
+</body>
+</html>
