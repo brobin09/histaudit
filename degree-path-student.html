@@ -133,7 +133,7 @@ table.courses input,table.courses select{width:100%;border:1px solid var(--line)
 <body>
 <header><div class="header-inner">
   <h1>Degree Path</h1>
-  <span class="sub">NCCU History Major</span>
+  <span class="sub">NCCU History Major · Audit import v2</span>
   <div class="header-actions">
     <button class="hbtn" id="btnImport" title="Import a Degree Path .json backup or a Department Student Audit .xlsx">Import</button>
     <button class="hbtn solid" id="btnExport">Export for Advisor</button>
@@ -943,7 +943,12 @@ function importAuditXlsx(file){
     Object.keys(imp.courses).forEach(function(sid){ fresh.courses[sid]=imp.courses[sid]; });
     allSections().forEach(function(s){ if(!fresh.courses[s.id]) fresh.courses[s.id]=[]; });
     state=fresh; save(); renderAll(); activateTab("progress");
-    var msg="Imported "+imp.count+" course"+(imp.count===1?"":"s")+" for "+who+".";
+    var gFilled=0,sFilled=0;
+    Object.keys(imp.courses).forEach(function(sid){ imp.courses[sid].forEach(function(c){
+      if(c.grade&&String(c.grade).trim()) gFilled++; if(c.semester&&String(c.semester).trim()) sFilled++; }); });
+    var msg="Audit import (v2) \u2014 "+imp.count+" course"+(imp.count===1?"":"s")+" for "+who+".\n"+
+            "Grades filled: "+gFilled+" of "+imp.count+"   \u00B7   Semesters filled: "+sFilled+" of "+imp.count+".";
+    if(gFilled<imp.count||sFilled<imp.count){ msg+="\n(A blank grade or semester means that cell was empty in the audit \u2014 e.g. transfer \u201CT\u201D courses usually list no semester.)"; }
     if(imp.unmatched.length){ msg+="\n\nAdded as written, but not found in the History catalog \u2014 please double-check placement:\n\u2022 "+imp.unmatched.join("\n\u2022 "); }
     alert(msg);
   };
