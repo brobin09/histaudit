@@ -35,6 +35,26 @@ header{background:var(--maroon);color:#fff;position:sticky;top:0;z-index:30;box-
 .welcome p{font-size:.86rem;opacity:.92;line-height:1.55;margin-bottom:6px}
 .welcome button{margin-top:10px;background:#fff;color:var(--maroon);border:none;padding:7px 16px;border-radius:5px;font-weight:600;font-size:.8rem}
 
+.sharedwarn{display:flex;gap:12px;align-items:flex-start;background:var(--warn-bg);border:1px solid var(--warn);
+  border-radius:8px;padding:13px 16px;margin-bottom:16px;font-size:.84rem;color:#6B4E15;line-height:1.55}
+.sharedwarn .sw-icon{font-size:1rem;flex:none;line-height:1.4}
+.sharedwarn .sw-body{flex:1}
+.sharedwarn strong{display:block;color:#4E390F;margin-bottom:2px}
+.sharedwarn em{font-style:normal;font-weight:700}
+.sharedwarn .sw-x{border:none;background:none;color:#8A6A22;font-size:1.1rem;line-height:1;padding:2px 4px;flex:none}
+.sharedwarn .sw-x:hover{color:#4E390F}
+
+#clearModal{position:fixed;inset:0;background:rgba(28,28,30,.5);display:none;z-index:60;align-items:center;justify-content:center;padding:30px}
+#clearModal.show{display:flex}
+#clearModal .sheet{background:#fff;border-radius:8px;width:min(460px,100%);padding:24px 26px;border-top:5px solid var(--maroon)}
+#clearModal h3{font-size:1.1rem;margin-bottom:8px}
+#clearModal p{font-size:.88rem;color:var(--grey);line-height:1.55;margin-bottom:10px}
+#clearModal p.warn{color:var(--err);font-weight:600}
+#clearModal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+#clearModal .btn{border:1px solid var(--line);background:#fff;padding:9px 16px;border-radius:5px;font-weight:600;font-size:.85rem;color:var(--ink)}
+#clearModal .btn.export{border-color:var(--maroon);color:var(--maroon)}
+#clearModal .btn.danger{background:var(--err);border-color:var(--err);color:#fff}
+
 .pdfcard{background:#fff;border:1px solid var(--line);border-left:4px solid var(--maroon);border-radius:8px;padding:16px 20px;margin-bottom:18px;box-shadow:var(--shadow)}
 .pdfcard h3{font-size:1rem;margin-bottom:3px}
 .pdfcard p{font-size:.84rem;color:var(--grey);margin-bottom:11px}
@@ -118,6 +138,7 @@ table.courses input{width:100%;border:1px solid var(--line);border-radius:4px;pa
 <header><div class="hin">
   <h1>Degree Path</h1><span class="sub">NCCU History Major</span>
   <div class="hact">
+    <button class="hbtn" id="btnClear">Clear My Data</button>
     <button class="hbtn" id="btnImport">Import File</button>
     <button class="hbtn solid" id="btnExport">Export for Advisor</button>
   </div>
@@ -129,6 +150,17 @@ table.courses input{width:100%;border:1px solid var(--line);border-radius:4px;pa
     <p>Download your audit PDF from DegreeWorks and import it below — Degree Path will read every course and place it under the right requirement automatically. Then add your goals and internships.</p>
     <p><strong>Everything stays in your browser.</strong> Use <em>Export for Advisor</em> to save a file for advising — that file is also your backup.</p>
     <button id="welcomeDone">Got it</button>
+  </div>
+
+  <div class="sharedwarn" id="sharedWarn">
+    <span class="sw-icon">\u26A0</span>
+    <div class="sw-body">
+      <strong>Using a shared or lab computer?</strong>
+      Your work saves in this browser, so the next person to open Degree Path on this machine would see it.
+      When you finish, click <em>Export for Advisor</em> to save your file, then <em>Clear My Data</em>.
+      Better still, open this page in a private/incognito window \u2014 it forgets everything when you close it.
+    </div>
+    <button class="sw-x" id="swDismiss" aria-label="Dismiss">\u00D7</button>
   </div>
 
   <div class="pdfcard">
@@ -151,6 +183,18 @@ table.courses input{width:100%;border:1px solid var(--line);border-radius:4px;pa
   <div class="panel" id="panel-goals"></div>
   <div class="panel" id="panel-internships"></div>
 </div>
+
+<div id="clearModal"><div class="sheet">
+  <h3>Clear your data from this browser?</h3>
+  <p>This erases everything Degree Path has stored here \u2014 your courses, goals, internships, and personal information.</p>
+  <p class="warn" id="clearWarn"></p>
+  <p>Do this whenever you finish on a shared or lab computer.</p>
+  <div class="row">
+    <button class="btn" id="clearCancel">Cancel</button>
+    <button class="btn export" id="clearExportFirst">Export first, then clear</button>
+    <button class="btn danger" id="clearConfirm">Clear everything</button>
+  </div>
+</div></div>
 
 <button id="backup" class="ok">Backed up</button>
 <input type="file" id="fileInput" accept=".json" hidden>
@@ -626,10 +670,17 @@ function doExport(){
   var p=Object.assign({},state,{_kind:"nccu-degree-path",_v:2,_exported:new Date().toISOString(),_summary:totals()});
   var json=JSON.stringify(p,null,2);
   if(window.showSaveFilePicker){
-    window.showSaveFilePicker({suggestedName:fname(),types:[{description:"Degree Path file",accept:{"application/json":[".json"]}}]})
-      .then(function(h){return h.createWritable().then(function(w){return w.write(json).then(function(){return w.close();});});})
-      .then(markClean).catch(function(err){if(err&&err.name==="AbortError")return;dl(json);markClean();});
-  }else{dl(json);markClean();}
+    return window.showSaveFilePicker({suggestedName:fname(),types:[{description:"Degree Path file",accept:{"application/json":[".json"]}}]})
+      .then(function(h){return h.createWritable();})
+      .then(function(w){return w.write(json).then(function(){return w.close();});})
+      .then(function(){markClean();return true;})
+      .catch(function(err){
+        if(err&&err.name==="AbortError") return false;   // user cancelled: nothing saved
+        dl(json);markClean();return true;
+      });
+  }
+  dl(json);markClean();
+  return Promise.resolve(true);
 }
 function dl(json){
   var b=new Blob([json],{type:"application/json"});
@@ -652,6 +703,61 @@ document.getElementById("fileInput").addEventListener("change",function(e){
     }catch(err){alert("That file isn't a Degree Path export.");}
   };
   r.readAsText(f);e.target.value="";
+});
+
+/* ---------- clear my data ---------- */
+function wipe(){
+  try{
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(DIRTY);
+    localStorage.removeItem("dp_welcomed_v2");
+    localStorage.removeItem("dp_sharedwarn_v2");
+  }catch(e){}
+  for(var k in mem) delete mem[k];
+  state=blank();
+  sset(DIRTY,"0");
+  renderAll();
+  var st=document.getElementById("pdfStatus");
+  st.className="pdfstatus good";
+  st.textContent="\u2713 Your data has been cleared from this browser.";
+  window.scrollTo(0,0);
+}
+document.getElementById("btnClear").addEventListener("click",function(){
+  var unsaved=sget(DIRTY)==="1";
+  document.getElementById("clearWarn").textContent = unsaved
+    ? "You have changes that are not yet in an exported file. Once cleared, they cannot be recovered."
+    : "";
+  document.getElementById("clearModal").classList.add("show");
+});
+document.getElementById("clearCancel").addEventListener("click",function(){
+  document.getElementById("clearModal").classList.remove("show");
+});
+document.getElementById("clearConfirm").addEventListener("click",function(){
+  document.getElementById("clearModal").classList.remove("show");
+  wipe();
+});
+document.getElementById("clearExportFirst").addEventListener("click",function(){
+  Promise.resolve(doExport()).then(function(saved){
+    if(!saved){ return; }                       // export cancelled: keep the data
+    document.getElementById("clearModal").classList.remove("show");
+    wipe();
+  });
+});
+document.getElementById("clearModal").addEventListener("mousedown",function(e){
+  if(e.target===this) this.classList.remove("show");
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape") document.getElementById("clearModal").classList.remove("show");
+});
+
+/* ---------- shared-computer banner ---------- */
+if(sget("dp_sharedwarn_v2")==="1"){
+  var sw=document.getElementById("sharedWarn"); if(sw) sw.remove();
+}
+var swd=document.getElementById("swDismiss");
+if(swd) swd.addEventListener("click",function(){
+  sset("dp_sharedwarn_v2","1");
+  document.getElementById("sharedWarn").remove();
 });
 
 /* welcome */

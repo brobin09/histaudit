@@ -56,6 +56,13 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.4rem,6vw,3.6rem
 .privacy p{font-size:.9rem;color:var(--ink)}
 .privacy p + p{margin-top:8px}
 
+.shared{background:var(--white);border:1px solid var(--line);border-left:4px solid var(--maroon);border-radius:8px;
+  padding:18px 22px;margin-top:14px;box-shadow:var(--shadow)}
+.shared h3{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--maroon);margin-bottom:8px}
+.shared p{font-size:.9rem;color:var(--ink);margin-bottom:8px}
+.shared ul{margin:0;padding-left:20px}
+.shared li{font-size:.9rem;color:var(--ink);margin-bottom:6px;line-height:1.55}
+
 footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-size:.78rem;color:var(--grey);
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 footer .col{font-family:Georgia,serif;font-style:italic}
@@ -102,8 +109,17 @@ footer .col{font-family:Georgia,serif;font-style:italic}
 
   <div class="privacy">
     <h3>Your work stays yours</h3>
-    <p>Degree Path runs entirely in your own browser. Nothing you enter is sent anywhere or stored on any server \u2014 not your grades, not your Banner ID, not your goals. Only you can see it.</p>
-    <p>Because it lives in your browser, clearing your browser data would erase it. The exported file is the real save, so export whenever you\u2019ve made changes.</p>
+    <p>Degree Path runs entirely in your own browser. Nothing you enter is sent anywhere or stored on any server \u2014 not your grades, not your Banner ID, not your goals. This page cannot receive your data even if it wanted to.</p>
+    <p>Because your work lives in the browser, clearing your browser data would erase it. The exported file is the real save, so export whenever you\u2019ve made changes.</p>
+  </div>
+
+  <div class="shared">
+    <h3>On a shared or lab computer?</h3>
+    <p>Since the browser holds your work, the next person to open Degree Path on that same machine could see it. Two ways to protect yourself:</p>
+    <ul>
+      <li>Open this page in a <strong>private / incognito window</strong>. It forgets everything the moment you close it \u2014 just export your file before you do.</li>
+      <li>Or when you finish, export your file and then click <strong>Clear My Data</strong> in the top bar.</li>
+    </ul>
   </div>
 
   <footer>
