@@ -56,6 +56,29 @@ header{background:var(--maroon);color:#fff;position:sticky;top:0;z-index:30;box-
 #clearModal .btn.danger{background:var(--err);border-color:var(--err);color:#fff}
 
 .tab .cnt{font-size:.66rem;background:var(--maroon);color:#fff;border-radius:10px;padding:1px 6px;margin-left:5px}
+.verdict{display:flex;gap:20px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--grey);border-radius:8px;padding:16px 20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.verdict.open{border-left-color:var(--maroon)}
+.verdict.hours{border-left-color:var(--warn)}
+.verdict.ok{border-left-color:var(--ok)}
+.verdict .v-main{flex:none;text-align:center;padding-right:20px;border-right:1px solid var(--line)}
+.verdict .v-count{font-family:Georgia,serif;font-size:2rem;font-weight:700;line-height:1;display:block}
+.verdict.ok .v-count{color:var(--ok)}
+.verdict.open .v-count{color:var(--maroon)}
+.verdict .v-of{font-size:1rem;color:var(--grey-light)}
+.verdict .v-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.11em;color:var(--grey);font-weight:700}
+.verdict .v-body{flex:1;font-size:.88rem;line-height:1.55}
+.stat.req .num{font-size:1.5rem}
+.stat.req .num .of{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);font-weight:700}
+.stat.req.done .num{color:var(--ok)}
+.stat .num .of{font-size:.85rem;color:var(--grey-light)}
+.stat .subhrs{font-size:.72rem;color:var(--grey);margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .subhrs .pg{color:#4A5A7A}
+.stat .lbl .pg{color:#4A5A7A;text-transform:none;letter-spacing:0;font-weight:600}
+.unmetrow{display:flex;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid var(--grey-pale)}
+.unmetrow:first-of-type{border-top:none}
+.um-name{flex:1;font-weight:700;font-size:.9rem}
+.um-state{font-size:.78rem;color:var(--maroon);font-weight:600}
+.allmet{color:var(--ok);font-weight:700;font-size:.9rem;padding:4px 0}
 .flagrow{display:flex;gap:10px;align-items:baseline;padding:9px 0;border-top:1px solid var(--grey-pale);font-size:.87rem}
 .flagrow:first-of-type{border-top:none}
 .fl-tag{flex:none;font-size:.6rem;font-weight:800;letter-spacing:.07em;padding:2px 7px;border-radius:3px;width:64px;text-align:center}
@@ -72,11 +95,9 @@ header{background:var(--maroon);color:#fff;position:sticky;top:0;z-index:30;box-
 .ipcell input{width:auto;accent-color:#4A5A7A}
 .col-ip{width:7%}
 .gchip.prog{border-color:#4A5A7A;color:#4A5A7A;border-style:dashed}
-.stat .num .of{font-size:.85rem;color:var(--grey-light)}
-.stat .lbl .pg{color:#4A5A7A;text-transform:none;letter-spacing:0;font-weight:600}
-.reqblock>h3 em{font-style:normal;opacity:.85;font-weight:500}
 .ovnote{background:#F3EAEC;border-left:3px solid var(--maroon);padding:7px 16px;font-size:.8rem;color:#5E1A24}
 .ovnote .ovlbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;font-weight:800;margin-right:7px}
+.reqblock>h3 em{font-style:normal;opacity:.85;font-weight:500}
 table.ledger{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:4px}
 table.ledger th{text-align:right;font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:var(--grey);font-weight:700;padding:5px 10px;border-bottom:1px solid var(--line)}
 table.ledger th:first-child{text-align:left}
@@ -84,36 +105,15 @@ table.ledger td{padding:8px 10px;border-bottom:1px solid var(--grey-pale);text-a
 table.ledger td:first-child{text-align:left}
 table.ledger .lname{font-weight:700;display:block}
 table.ledger .lreq{font-size:.7rem;color:var(--grey-light)}
+table.ledger .ltyp{color:var(--grey)}
 table.ledger .lprog{color:#4A5A7A}
 table.ledger .lshort{color:var(--err);font-weight:700}
 table.ledger .lok{color:var(--ok);font-weight:700}
 table.ledger .ltotal{font-weight:700}
-table.ledger .ltyp{color:var(--grey);font-variant-numeric:tabular-nums}
 table.ledger .loff{color:var(--maroon)}
 table.ledger .ledger-total td{border-top:2px solid var(--ink);border-bottom:none;font-weight:800;padding-top:9px}
 .ledgernote{font-size:.8rem;color:var(--grey);margin-top:10px;line-height:1.55;background:var(--paper);border-left:3px solid var(--maroon);padding:8px 12px}
 .ledgernote strong{color:var(--ink)}
-.verdict{display:flex;gap:20px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--grey);border-radius:8px;padding:16px 20px;margin-bottom:14px;box-shadow:var(--shadow)}
-.verdict.open{border-left-color:var(--maroon)}
-.verdict.hours{border-left-color:var(--warn)}
-.verdict.ok{border-left-color:var(--ok)}
-.verdict .v-main{flex:none;text-align:center;padding-right:20px;border-right:1px solid var(--line)}
-.verdict .v-count{font-family:Georgia,serif;font-size:2rem;font-weight:700;line-height:1;display:block}
-.verdict.ok .v-count{color:var(--ok)}
-.verdict.open .v-count{color:var(--maroon)}
-.verdict .v-of{font-size:1rem;color:var(--grey-light)}
-.verdict .v-lbl{font-size:.62rem;text-transform:uppercase;letter-spacing:.11em;color:var(--grey);font-weight:700}
-.verdict .v-body{flex:1;font-size:.88rem;line-height:1.55}
-.stat.req .num{font-size:1.5rem}
-.stat.req .num .of{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);font-weight:700}
-.stat.req.done .num{color:var(--ok)}
-.stat .subhrs{font-size:.72rem;color:var(--grey);margin-top:6px;font-variant-numeric:tabular-nums}
-.stat .subhrs .pg{color:#4A5A7A}
-.unmetrow{display:flex;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid var(--grey-pale)}
-.unmetrow:first-of-type{border-top:none}
-.um-name{flex:1;font-weight:700;font-size:.9rem}
-.um-state{font-size:.78rem;color:var(--maroon);font-weight:600}
-.allmet{color:var(--ok);font-weight:700;font-size:.9rem;padding:4px 0}
 @media(max-width:640px){.verdict{flex-direction:column;align-items:flex-start;gap:12px}.verdict .v-main{border-right:none;padding-right:0}}
 .pdfcard{background:#fff;border:1px solid var(--line);border-left:4px solid var(--maroon);border-radius:8px;padding:16px 20px;margin-bottom:18px;box-shadow:var(--shadow)}
 .pdfcard h3{font-size:1rem;margin-bottom:3px}
@@ -261,7 +261,9 @@ table.courses input{width:100%;border:1px solid var(--line);border-radius:4px;pa
 
 <button id="backup" class="ok">Backed up</button>
 <input type="file" id="fileInput" accept=".json" hidden>
-<input type="file" id="pdfInput" accept=".pdf" h<script>
+<input type="file" id="pdfInput" accept=".pdf" hidden>
+
+<script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 var CURRICULUM = {"major":"History","catalog":{"HIST 1100":{"number":"HIST 1100","title":"World Societies to 1650","valid":["Core Required"],"credits":3},"HIST 2000":{"number":"HIST 2000","title":"Historical Writing and Literature","valid":["Core Required","Writing Intensive"],"credits":3},"HIST 2210":{"number":"HIST 2210","title":"United States History to 1865","valid":["Core Required"],"credits":3},"HIST 2220":{"number":"HIST 2220","title":"United States History Since 1865","valid":["Core Required"],"credits":3},"HIST 2890":{"number":"HIST 2890","title":"Methods and Applications in History","valid":["Core Required"],"credits":3},"HIST 4010":{"number":"HIST 4010","title":"Seminar in European History","valid":["Seminar","European"],"credits":3},"HIST 4020":{"number":"HIST 4020","title":"Seminar in American History","valid":["Seminar"],"credits":3},"HIST 4040":{"number":"HIST 4040","title":"Seminar in African History","valid":["Seminar","African"],"credits":3},"HIST 4050":{"number":"HIST 4050","title":"Seminar in African American History","valid":["Seminar"],"credits":3},"HIST 4060":{"number":"HIST 4060","title":"Seminar in Latin American History","valid":["Seminar","Latin American"],"credits":3},"HIST 4070":{"number":"HIST 4070","title":"Seminar in the African Diaspora","valid":["Seminar"],"credits":3},"HIST 2410":{"number":"HIST 2410","title":"African History to 1800","valid":["African","Elective"],"credits":3},"HIST 2420":{"number":"HIST 2420","title":"African History Since 1800","valid":["African","Elective"],"credits":3},"HIST 3040":{"number":"HIST 3040","title":"Topics in African History","valid":["African","Elective"],"credits":3},"HIST 3410":{"number":"HIST 3410","title":"Ancient Africa","valid":["African","Elective"],"credits":3},"HIST 3420":{"number":"HIST 3420","title":"State Formation in Pre-Colonial Africa","valid":["African","Elective"],"credits":3},"HIST 3430":{"number":"HIST 3430","title":"Africa Under Colonial Rule","valid":["African","Elective"],"credits":3},"HIST 3440":{"number":"HIST 3440","title":"Africa Since Independence","valid":["African","Elective"],"credits":3},"HIST 3450":{"number":"HIST 3450","title":"African Economic History","valid":["African","Elective"],"credits":3},"HIST 4400":{"number":"HIST 4400","title":"Independent Readings in African History","valid":["African","Elective"],"credits":3},"HIST 4450":{"number":"HIST 4450","title":"History of Contemporary South Africa","valid":["African","Elective"],"credits":3},"HIST 4470":{"number":"HIST 4470","title":"History of Pan-Africanism to 1963","valid":["African","Elective"],"credits":3},"HIST 3010":{"number":"HIST 3010","title":"Problems in European History","valid":["European","Elective"],"credits":3},"HIST 3100":{"number":"HIST 3100","title":"Independent Readings in European History","valid":["European","Elective"],"credits":3},"HIST 3115":{"number":"HIST 3115","title":"Europe, 1500-1815","valid":["European","Elective"],"credits":3},"HIST 3118":{"number":"HIST 3118","title":"Europe, 1815-1914","valid":["European","Elective"],"credits":3},"HIST 3145":{"number":"HIST 3145","title":"History of Russia to the Revolution","valid":["European","Elective"],"credits":3},"HIST 3150":{"number":"HIST 3150","title":"History of England to 1688","valid":["European","Elective"],"credits":3},"HIST 3160":{"number":"HIST 3160","title":"History of England since 1688","valid":["European","Elective"],"credits":3},"HIST 3180":{"number":"HIST 3180","title":"History of France since the Enlightenment","valid":["European","Elective"],"credits":3},"HIST 4110":{"number":"HIST 4110","title":"Europe Since 1914","valid":["European","Elective"],"credits":3},"HIST 4120":{"number":"HIST 4120","title":"European Diplomatic History, 1879 to Present","valid":["European","Elective"],"credits":3},"HIST 4140":{"number":"HIST 4140","title":"The Revolutionary Era and Napoleon","valid":["European","Elective"],"credits":3},"HIST 4150":{"number":"HIST 4150","title":"European Intellectual History","valid":["European","Elective"],"credits":3},"HIST 4160":{"number":"HIST 4160","title":"The African Presence in Europe","valid":["European","Elective"],"credits":3},"HIST 4170":{"number":"HIST 4170","title":"The New Europeans: Race and Minorities","valid":["European","Elective"],"credits":3},"HIST 2610":{"number":"HIST 2610","title":"Latin America: Colonial Period, 1480-1820","valid":["Latin American","Elective"],"credits":3},"HIST 2620":{"number":"HIST 2620","title":"Latin America: The National Period","valid":["Latin American","Elective"],"credits":3},"HIST 3600":{"number":"HIST 3600","title":"Independent Readings in Latin American History","valid":["Latin American","Elective"],"credits":3},"HIST 4620":{"number":"HIST 4620","title":"Latin American Revolution","valid":["Latin American","Elective"],"credits":3},"HIST 4630":{"number":"HIST 4630","title":"The African Presence in Latin America","valid":["Latin American","Elective"],"credits":3},"HIST 4640":{"number":"HIST 4640","title":"Latin American History Through Literature/Film","valid":["Latin American","Elective"],"credits":3},"HIST 2080":{"number":"HIST 2080","title":"History of Women to 1750","valid":["Elective"],"credits":3},"HIST 2081":{"number":"HIST 2081","title":"History of Women Since 1750","valid":["Elective"],"credits":3},"HIST 2110":{"number":"HIST 2110","title":"Ancient History","valid":["Elective"],"credits":3},"HIST 2120":{"number":"HIST 2120","title":"Medieval History","valid":["Elective"],"credits":3},"HIST 2910":{"number":"HIST 2910","title":"South Asia Prior to 1750","valid":["Elective"],"credits":3},"HIST 3020":{"number":"HIST 3020","title":"Problems in American History","valid":["Elective"],"credits":3},"HIST 3070":{"number":"HIST 3070","title":"Topics in the African Diaspora","valid":["Elective"],"credits":3},"HIST 3210":{"number":"HIST 3210","title":"American Military History","valid":["Elective"],"credits":3},"HIST 3220":{"number":"HIST 3220","title":"Recent United States History","valid":["Elective"],"credits":3},"HIST 3230":{"number":"HIST 3230","title":"American Urban History","valid":["Elective"],"credits":3},"HIST 3250":{"number":"HIST 3250","title":"American Economic History","valid":["Elective"],"credits":3},"HIST 3260":{"number":"HIST 3260","title":"American Labor History","valid":["Elective"],"credits":3},"HIST 3500":{"number":"HIST 3500","title":"Independent Readings in African American History","valid":["Elective"],"credits":3},"HIST 3510":{"number":"HIST 3510","title":"African American History to 1865","valid":["Elective"],"credits":3},"HIST 3520":{"number":"HIST 3520","title":"African American History Since 1865","valid":["Elective"],"credits":3},"HIST 3630":{"number":"HIST 3630","title":"History of Central America","valid":["Elective"],"credits":3},"HIST 3710":{"number":"HIST 3710","title":"Introduction to African Diaspora History","valid":["Elective"],"credits":3},"HIST 3900":{"number":"HIST 3900","title":"Internship in Historical Studies","valid":["Elective"],"credits":3},"HIST 3910":{"number":"HIST 3910","title":"South Asia Under British Rule, 1750-1885","valid":["Elective"],"credits":3},"HIST 3920":{"number":"HIST 3920","title":"Unmaking of British Empire in India, 1885-1947","valid":["Elective"],"credits":3},"HIST 4130":{"number":"HIST 4130","title":"Renaissance, Reformation, and Expansion","valid":["Elective"],"credits":3},"HIST 4200":{"number":"HIST 4200","title":"Independent Readings in American History","valid":["Elective"],"credits":3},"HIST 4210":{"number":"HIST 4210","title":"Foreign Relations of the United States","valid":["Elective"],"credits":3},"HIST 4230":{"number":"HIST 4230","title":"Constitutional History of the United States","valid":["Elective"],"credits":3},"HIST 4310":{"number":"HIST 4310","title":"History of North Carolina","valid":["Elective"],"credits":3},"HIST 4510":{"number":"HIST 4510","title":"Modern African American History Since 1900","valid":["Elective"],"credits":3},"HIST 4610":{"number":"HIST 4610","title":"History of the Caribbean","valid":["Elective"],"credits":3},"HIST 4755":{"number":"HIST 4755","title":"Topics in African Diaspora History","valid":["Elective"],"credits":3},"HIST 4810":{"number":"HIST 4810","title":"Oral History-Theory","valid":["Elective"],"credits":3},"HIST 4910":{"number":"HIST 4910","title":"Comparative Slavery","valid":["Elective"],"credits":3},"HIST 4940":{"number":"HIST 4940","title":"Fiction, Film and South Asia's Past","valid":["Elective"],"credits":3},"HIST 1320":{"number":"HIST 1320","title":"World Societies","valid":["GE Social Science (Required)"]},"HIST 1530":{"number":"HIST 1530","title":"The Black Experience to 1865","valid":["GE Social Science"]},"HIST 1540":{"number":"HIST 1540","title":"The Black Experience Since 1865","valid":["GE Social Science"]}},"ge_catalog":[{"number":"ENG 1110","title":"English Composition I","credits":3,"section":"English Composition"},{"number":"ENG 1210","title":"English Composition II","credits":3,"section":"English Composition"},{"number":"SPAN 1192","title":"Elementary Spanish II","credits":3,"section":"Foreign Language"},{"number":"FREN 1192","title":"Elementary French II","credits":3,"section":"Foreign Language"},{"number":"GERM 1192","title":"Elementary German II","credits":3,"section":"Foreign Language"},{"number":"MFL 1192","title":"Critical Language II","credits":3,"section":"Foreign Language"},{"number":"MATH 1080","title":"Mathematics for Liberal Arts & Social Sciences","credits":3,"section":"Mathematics"},{"number":"MATH 1100","title":"College Algebra and Trigonometry I","credits":3,"section":"Mathematics"},{"number":"MATH 1110","title":"Elementary Statistics","credits":3,"section":"Mathematics"},{"number":"MATH 1200","title":"College Algebra and Trigonometry II","credits":3,"section":"Mathematics"},{"number":"MATH 1210","title":"Finite Mathematics","credits":3,"section":"Mathematics"},{"number":"MATH 1410","title":"Pre-Calculus Mathematics","credits":5,"section":"Mathematics"},{"number":"BIOL 1000","title":"Heredity and Society","credits":3,"section":"Science"},{"number":"BIOL 1100","title":"General Biology","credits":3,"section":"Science"},{"number":"BIOL 1300","title":"Molecules and Cell Function","credits":4,"section":"Science"},{"number":"BIOL 2105","title":"Biology/Chemistry. Intro to Computational Science and Informatics","credits":3,"section":"Science"},{"number":"CHEM 1000","title":"Physical Science Related to Chem","credits":3,"section":"Science"},{"number":"CHEM 1100","title":"General Chemistry I","credits":4,"section":"Science"},{"number":"CHEM 1200","title":"General Chemistry II","credits":4,"section":"Science"},{"number":"CHEM 1500","title":"Chemistry and Human Life","credits":3,"section":"Science"},{"number":"CHEM 2105","title":"Computational Science & Informatics","credits":3,"section":"Science"},{"number":"GEOG 2010","title":"Online Weather","credits":3,"section":"Science"},{"number":"GEOG 2100","title":"Physical Geography","credits":3,"section":"Science"},{"number":"GEOG 2120","title":"Geology","credits":3,"section":"Science"},{"number":"GEOG 2350","title":"Earth Science","credits":3,"section":"Science"},{"number":"PHYS 1000","title":"Physics w/ Application to Enviro Topics","credits":3,"section":"Science"},{"number":"PHYS 1210","title":"The Language of Science","credits":3,"section":"Science"},{"number":"PHYS 1050","title":"Astronomy","credits":3,"section":"Science"},{"number":"SCI 1220","title":"Science Odyssey","credits":4,"section":"Science"},{"number":"STEM 1200","title":"Scientific Decisions in Everyday Life","credits":3,"section":"Science"},{"number":"ENSC 1000","title":"Intro to Sustainable Planet","credits":3,"section":"Science"},{"number":"HIST 1320","title":"World Societies (REQUIRED)","credits":3,"section":"Social Science"},{"number":"HIST 1530","title":"The Black Experience to 1865","credits":3,"section":"Social Science"},{"number":"HIST 1540","title":"The Black Experience Since 1865","credits":3,"section":"Social Science"},{"number":"ECON 2200","title":"Principles of Macroeconomics","credits":3,"section":"Social Science"},{"number":"ECON 2100","title":"Principles of Microeconomics","credits":3,"section":"Social Science"},{"number":"GEOG 1000","title":"Intro to Geography","credits":3,"section":"Social Science"},{"number":"GEOG 1100","title":"World Regional Geography","credits":3,"section":"Social Science"},{"number":"GLST 1000","title":"The Global Experience","credits":3,"section":"Social Science"},{"number":"POLS 2100","title":"American Government","credits":3,"section":"Social Science"},{"number":"PSY 2100","title":"General Psychology","credits":3,"section":"Social Science"},{"number":"SOCI 2000","title":"Global Societies and Human Behavior","credits":3,"section":"Social Science"},{"number":"SOCI 2100","title":"Principles of Sociology","credits":3,"section":"Social Science"},{"number":"SOCI 2300","title":"Social Problems","credits":3,"section":"Social Science"},{"number":"HUM 2410","title":"Arts & Humanities I (One Required)","credits":3,"section":"Arts & Humanities"},{"number":"HUM 2420","title":"Arts & Humanities II (One Required)","credits":3,"section":"Arts & Humanities"},{"number":"ART 1000","title":"Intro to the Study of Art","credits":2,"section":"Arts & Humanities"},{"number":"ART 3200","title":"African-American Art History","credits":4,"section":"Arts & Humanities"},{"number":"ART 1500","title":"Survey of the History of Art","credits":3,"section":"Arts & Humanities"},{"number":"DRAM 1000","title":"Appreciation of Drama","credits":2,"section":"Arts & Humanities"},{"number":"DRAM 2110","title":"History of the Theatre I","credits":3,"section":"Arts & Humanities"},{"number":"DRAM 2120","title":"History of the Theatre II","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1300","title":"World Literature I","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1400","title":"World Literature II","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1500","title":"Writing about Literature","credits":3,"section":"Arts & Humanities"},{"number":"ENG 1700","title":"Religion and Literature","credits":3,"section":"Arts & Humanities"},{"number":"ENG 2340","title":"Contemporary African American Literature","credits":3,"section":"Arts & Humanities"},{"number":"FREN 2300","title":"Intro to Francophone Literature","credits":3,"section":"Arts & Humanities"},{"number":"GERM 2104","title":"Intro to German Civilization","credits":3,"section":"Arts & Humanities"},{"number":"GERM 2105","title":"Intro to German Literature","credits":3,"section":"Arts & Humanities"},{"number":"MUSL 1000","title":"Survey of Music","credits":3,"section":"Arts & Humanities"},{"number":"MUSL 1300","title":"Twentieth-Century Music","credits":2,"section":"Arts & Humanities"},{"number":"PHIL 1000","title":"Intro to Philosophy","credits":3,"section":"Arts & Humanities"},{"number":"PHIL 2210","title":"Ethics","credits":3,"section":"Arts & Humanities"},{"number":"SPAN 2300","title":"Intro to Hispanic Literature","credits":3,"section":"Arts & Humanities"},{"number":"SPAN 3300","title":"Intro to African-Hispanic Literature","credits":3,"section":"Arts & Humanities"},{"number":"HEDU 1531","title":"Health (REQUIRED)","credits":2,"section":"Health & Wellness"},{"number":"KIN 1541","title":"Fitness (REQUIRED)","credits":2,"section":"Health & Wellness"},{"number":"UNIV 1100","title":"First Year Seminar","credits":2,"section":"Social & Career Enhancement"},{"number":"HIST 2000","title":"Historical Writing and Literature (Fulfills for History Majors)","credits":3,"section":"Writing Intensive"},{"number":"MSCM 1250","title":"Elements of Speech Communication (Recommended)","credits":3,"section":"Speaking Intensive"},{"number":"MSCM 2200","title":"Introduction to Public Speaking (Recommended)","credits":3,"section":"Speaking Intensive"},{"number":"MATH 1051","title":"Mathematics for Education Majors","credits":3,"section":"Mathematics"},{"number":"FIN 2000","title":"Personal Finance","credits":3,"section":"Social Science"},{"number":"ART 1510","title":"African American Art History","credits":3,"section":"Arts & Humanities"},{"number":"NURS 4205","title":"Global Health Perspectives","credits":3,"section":"Arts & Humanities"},{"number":"MGT 3400","title":"Business Communications","credits":3,"section":"Speaking Intensive"}],"requirements":{"ge":{"label":"General Education","min":39,"max":40,"total":39,"sections":[{"id":"eng_comp","label":"English Composition","hours":6,"note":"ENG 1110 & 1210"},{"id":"foreign_lang","label":"Foreign Language","hours":3,"note":"3 hrs; placement may satisfy"},{"id":"math","label":"Mathematics","hours":3,"note":"3-5 hrs, choose one"},{"id":"science","label":"Science","hours":6,"note":"6-8 hrs, choose two"},{"id":"social_science","label":"Social Science","hours":6,"note":"HIST 1320 required + one more"},{"id":"foundations","label":"Foundations of American Democracy","hours":0,"rule":"flag","note":"Satisfied by HIST 1320, or transfer/AP/CLEP, or Canvas modules","auto":"HIST 1320","waivable":true},{"id":"arts_hum","label":"Arts & Humanities","hours":5,"note":"5-6 hrs; one HUM required"},{"id":"health","label":"Health & Wellness","hours":4,"note":"HEDU 1531 & KIN 1541"},{"id":"career","label":"First Year Seminar","hours":2,"note":"UNIV 1100; waived with 30+ transfer credits","waivable":true},{"id":"speaking_int","label":"Speaking Intensive","hours":3,"note":"MSCM 1250 or 2200"},{"id":"writing_int","label":"Writing Intensive","hours":0,"rule":"flag","note":"HIST 2000 - credits count in the major","auto":"HIST 2000"}]},"major":{"label":"Major in History","total":42,"sections":[{"id":"core_required","label":"Departmental Requirements","hours":15,"rule":"list","required":["HIST 1100","HIST 2000","HIST 2210","HIST 2220","HIST 2890"],"note":"HIST 1100, 2000, 2210, 2220, 2890"},{"id":"regional","label":"Regional History","hours":6,"rule":"groups","groups":["African","European","Latin American"],"need_groups":2,"note":"Select 2 groups: African, European, or Latin American"},{"id":"seminar","label":"Seminar","hours":3,"rule":"choose","tag":"Seminar","note":"Choose one"},{"id":"hist_electives","label":"History Electives","hours":18,"rule":"fill","note":"18 hrs, 2000-level or above"}]},"gen_electives":{"label":"Required General Electives","total":38,"sections":[{"id":"gen_electives","label":"General Electives","hours":38,"rule":"free","note":"Whatever is needed to reach 120 total"}],"dynamic":true}},"degree":{"total":120,"community_engagement":120,"typical":{"gec":39,"major":42,"electives":39,"total":120},"note":"A History major typically closes at 39 gen ed + 42 major + 39 electives. Gen ed can run to 40 (a 5-credit math or an 8-credit science pair), and electives absorb the difference so the total stays 120."}};
 </script>
@@ -920,11 +922,53 @@ function renderSection(sec){
 }
 
 /* ---------- what's left ---------- */
+function ledgerRow(name,typical,earned,prog,short,total,req){
+  var off = total!==typical;
+  return '<tr><td><span class="lname">'+name+'</span><span class="lreq">'+req+'</span></td>'+
+    '<td class="ltyp">'+typical+'</td>'+
+    '<td>'+earned+'</td><td class="lprog">'+(prog||"\u2014")+'</td>'+
+    '<td class="'+(short>0?"lshort":"lok")+'">'+(short>0?short:"\u2713")+'</td>'+
+    '<td class="ltotal'+(off?" loff":"")+'">'+total+'</td></tr>';
+}
+
 function renderNeeds(){
   var fl=DP.flags(state);
-  var html='<div class="asp-card"><h3>What you still need</h3>'+
-    '<p class="hint">Based on what you have entered. Courses in progress do not count until a passing grade posts.</p>';
-  if(!fl.length) html+='<p class="empty-hint">Everything on record is met.</p>';
+  var G=DP.graduationCheck(state);
+  var t=DP.totals(state), L=t.ledger, TY=L.typical;
+
+  /* Requirements first. Hours are the check. */
+  var html='<div class="asp-card"><h3>Requirements not yet met</h3>'+
+    '<p class="hint">This is what matters most. Credit hours are the secondary check below.</p>';
+  if(G.requirementsMet){
+    html+='<p class="allmet">\u2713 Every requirement is met.</p>';
+  } else {
+    G.unmet.forEach(function(u){
+      html+='<div class="unmetrow"><span class="um-name">'+esc(u.label)+'</span>'+
+        '<span class="um-state">'+esc(u.state.label)+'</span></div>';
+    });
+  }
+  html+='</div>';
+
+  /* The hours check. */
+  html+='<div class="asp-card"><h3>Path to 120</h3>'+
+    '<p class="hint">A history major usually closes at <strong>'+TY.gec+' general education + '+TY.major+
+      ' major + '+TY.electives+' electives</strong>. The major is fixed at 42. If your general education runs to 40 \u2014 '+
+      'a 5-credit math, say \u2014 your electives simply drop to 38. The total is always 120.</p>'+
+    '<table class="ledger"><thead><tr><th>Requirement</th><th>Typical</th><th>Earned</th>'+
+    '<th>In progress</th><th>Still short</th><th>Will total</th></tr></thead><tbody>'+
+    ledgerRow("General Education",TY.gec,L.gec.earned,L.gec.prog,L.gec.short,L.gec.projected,DP.geLabel())+
+    ledgerRow("Major in History",TY.major,L.major.earned,L.major.prog,L.major.short,L.major.projected,"42 fixed")+
+    ledgerRow("General Electives",TY.electives,L.electives.earned,L.electives.prog,L.electives.needed,L.electives.target,"remainder")+
+    '<tr class="ledger-total"><td>Total</td><td>120</td><td>'+t.earned+'</td><td>'+t.prog+'</td>'+
+      '<td>'+t.remaining+'</td><td>120</td></tr></tbody></table>'+
+    '<p class="ledgernote">Your elective target = 120 \u2212 '+L.gec.projected+' (gen ed) \u2212 '+L.major.projected+
+      ' (major) = <strong>'+L.electives.target+'</strong>. You have '+L.electives.earned+
+      ', so you need <strong>'+L.electives.needed+'</strong> more.</p></div>';
+
+  /* Everything else worth flagging. */
+  html+='<div class="asp-card"><h3>Detail</h3>'+
+    '<p class="hint">Courses in progress do not count until a passing grade posts.</p>';
+  if(!fl.length) html+='<p class="empty-hint">Nothing outstanding.</p>';
   fl.forEach(function(f){
     html+='<div class="flagrow '+f.level+'"><span class="fl-tag">'+
       ({warn:"AT RISK",need:"NEEDED",watch:"PENDING",note:"NOTE"}[f.level]||f.level)+'</span>'+
@@ -932,10 +976,10 @@ function renderNeeds(){
       '<span class="fl-text">'+esc(f.text)+'</span></div>';
   });
   html+='</div>';
+
   document.getElementById("panel-needs").innerHTML=html;
-  var warn=fl.filter(function(f){return f.level==="warn"||f.level==="need";}).length;
   var b=document.getElementById("needsCount");
-  if(b) b.textContent=warn||"";
+  if(b) b.textContent=G.unmet.length||"";
 }
 
 /* ---------- info / goals / internships ---------- */
