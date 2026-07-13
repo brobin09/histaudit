@@ -241,13 +241,15 @@ function status(c){
 }
 function nm(v){ var n=parseFloat(v); return isNaN(n)?0:n; }
 
-/* earned = complete only. Never counts in-progress. */
+/* earned = complete coursework only.
+   A waiver satisfies the REQUIREMENT but grants no credit hours — the
+   student still has to reach 120 with real coursework from elsewhere. */
 function earned(state,id){
-  if(state.waived&&state.waived[id]) return sectionOf(id).hours;
   return (state.courses[id]||[]).reduce(function(t,c){
     return t + (status(c)==="complete" ? nm(c.credits) : 0);
   },0);
 }
+function isWaived(state,id){ return !!(state.waived && state.waived[id]); }
 function inProgress(state,id){
   return (state.courses[id]||[]).reduce(function(t,c){
     return t + (status(c)==="inprogress" ? nm(c.credits) : 0);
@@ -300,8 +302,12 @@ function validPlacement(sec,course){
 /* ---------- section state ---------- */
 function sectionState(state,sec){
   var e=earned(state,sec.id), p=inProgress(state,sec.id);
-  var waived=!!(state.waived&&state.waived[sec.id]);
-  if(waived) return {label:"\u2713 Waived",cls:"met",earned:sec.hours,prog:0,met:true};
+  if(isWaived(state,sec.id)){
+    var lbl="\u2713 Waived";
+    if(e>0) lbl+=" \u00B7 "+e+" hrs earned";
+    else lbl+=" \u00B7 0 hrs";
+    return {label:lbl,cls:"met",earned:e,prog:p,met:true,waived:true};
+  }
   if(sec.rule==="groups"){
     var have=regionsHeld(state,false), withProg=regionsHeld(state,true);
     var met=have.length>=2;
@@ -345,7 +351,7 @@ function flags(state){
   var out=[];
   sections().forEach(function(sec){
     if(sec.rule==="free") return;
-    if(state.waived&&state.waived[sec.id]) return;
+    if(isWaived(state,sec.id)) return;            // requirement satisfied by waiver
     var st=sectionState(state,sec);
     if(st.met) return;
     var e=st.earned, p=st.prog;
@@ -373,6 +379,14 @@ function flags(state){
       }
     });
   });
+  // waivers: requirement met, but the hours still have to come from somewhere
+  var wv=sections().filter(function(s){return isWaived(state,s.id);});
+  if(wv.length){
+    var hrs=wv.reduce(function(t,s){return t+s.hours;},0);
+    out.push({level:"note",section:"Waivers",
+      text:wv.map(function(s){return s.label;}).join(" and ")+" waived. The requirement is satisfied, but the "+
+        hrs+" hr(s) are not credited \u2014 they must still be made up through electives to reach "+C.degree.total+"."});
+  }
   var t=totals(state);
   var remaining=C.degree.total-t.earned-t.prog;
   if(remaining>0) out.push({level:"need",section:"Total Credits",
